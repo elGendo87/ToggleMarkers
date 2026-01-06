@@ -89,11 +89,12 @@ namespace ToggleMarkers.MOD
                         AccessTools.Method(bindingInstance.GetType(), "Update").Invoke(bindingInstance, null);
 
                         // Try to trigger EDT UI event if exist
-                        var uiSystem = world.Systems.FirstOrDefault(s => s.GetType().Name == "UISystem");
-                        if (uiSystem != null)
+                        var edtUISystem = world.Systems.FirstOrDefault(s => s.GetType().FullName == "ExtraDetailingTools.Systems.UI.UI");
+
+                        if (edtUISystem != null)
                         {
-                            var triggerMethod = AccessTools.Method(uiSystem.GetType(), "TriggerEvent", new Type[] { typeof(string), typeof(string) });
-                            triggerMethod?.Invoke(uiSystem, new object[] { "edt", "updatemarkersvisible" });
+                            var triggerMethod = AccessTools.Method(edtUISystem.GetType(), "TriggerEvent", new Type[] { typeof(string), typeof(string) });
+                            triggerMethod?.Invoke(edtUISystem, new object[] { "edt", "updatemarkersvisible" });
                         }
 
                         log.Info("EDT synched finished.");
