@@ -11,106 +11,189 @@ using HarmonyLib;
 using System.Linq;
 using System;
 using ToggleMarkers.MOD.Patches;
+using UnityEngine.InputSystem;
 
 namespace ToggleMarkers.MOD
 {
+    /// <summary>
+    /// Main mod entry point.
+    /// Handles lifecycle, input binding, marker toggling logic
+    /// and optional synchronization with external mods.
+    /// </summary>
     public class Mod : IMod
     {
-        public static ILog log = LogManager.GetLogger($"{nameof(ToggleMarkers)}").SetShowsErrorsInUI(false);
+        // Logger instance for this mod
+        public static ILog log = LogManager
+            .GetLogger($"{nameof(ToggleMarkers)}")
+            .SetShowsErrorsInUI(false);
+
+        // Mod settings instance
         private Setting m_Setting;
+
+        // Input action used to toggle markers visibility
         public static ProxyAction m_ToggleAction;
+
+        // Action name as defined in the settings
         public const string kButtonActionName = "ToggleMarkersAction";
+
+        // Harmony instance used for patching
         private Harmony m_Harmony;
+
+        // Cached input handler delegate to allow proper unregistration on dispose
+        private Action<ProxyAction, InputActionPhase> _toggleHandler;
+
+        // Cached EDT UI type (reflection)
+        // Used to avoid scanning assemblies on every key press
+        private static Type _edtUIType;
+        private static bool _edtScanned;
 
         public void OnLoad(UpdateSystem updateSystem)
         {
+            // Initialize and apply Harmony patches
             m_Harmony = new Harmony("com.g87.togglemarkers");
             m_Harmony.PatchAll();
 
+            // Create and register mod settings
             m_Setting = new Setting(this);
             m_Setting.RegisterInOptionsUI();
 
+            // Register localization sources
             var lm = GameManager.instance.localizationManager;
-
             foreach (var locale in lm.GetSupportedLocales())
             {
                 lm.AddSource(locale, new LocaleEN(m_Setting));
             }
 
-            AssetDatabase.global.LoadSettings(nameof(ToggleMarkers), m_Setting, new Setting(this));
+            // Load persisted settings or apply defaults
+            AssetDatabase.global.LoadSettings(
+                nameof(ToggleMarkers),
+                m_Setting,
+                new Setting(this)
+            );
 
+            // Register key bindings defined in settings
             m_Setting.RegisterKeyBindings();
+
+            // Retrieve the toggle action
             m_ToggleAction = m_Setting.GetAction(kButtonActionName);
             m_ToggleAction.shouldBeEnabled = true;
 
-            m_ToggleAction.onInteraction += (_, phase) =>
+            // Store delegate reference to properly unregister later
+            _toggleHandler = (_, phase) =>
             {
-                if (phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+                if (phase == InputActionPhase.Performed)
                 {
                     ToggleMarkersLogic();
                 }
             };
+
+            // Subscribe to input interaction
+            m_ToggleAction.onInteraction += _toggleHandler;
         }
 
+        /// <summary>
+        /// Toggles marker visibility state and attempts to synchronize
+        /// with external mods if present.
+        /// </summary>
         private void ToggleMarkersLogic()
         {
-            // 1. Cambiar estado interno
-            TogglePatch.MarkersVisiblePatch.ForceEnabled = !TogglePatch.MarkersVisiblePatch.ForceEnabled;
+            // Toggle internal marker visibility state
+            TogglePatch.MarkersVisiblePatch.ForceEnabled =
+                !TogglePatch.MarkersVisiblePatch.ForceEnabled;
 
-            // 2. Intentar sincronizar con EDT solo si está presente
+            // Attempt best-effort synchronization with external mods
             TrySyncWithExternalMods();
 
-            log.Info($"[ToggleMarkers] F9 Pressed. State: {TogglePatch.MarkersVisiblePatch.ForceEnabled}");
+            // Log input event at debug level to avoid log spam
+            log.Debug(
+                $"F9 pressed → MarkersVisible={TogglePatch.MarkersVisiblePatch.ForceEnabled}"
+            );
         }
 
+        /// <summary>
+        /// Attempts to synchronize marker visibility state with
+        /// Extra Detailing Tools (EDT), if installed.
+        /// This method must never break gameplay if EDT is absent or changes.
+        /// </summary>
         private void TrySyncWithExternalMods()
         {
             try
             {
+                // Access the default ECS world
                 var world = World.DefaultGameObjectInjectionWorld;
-                if (world == null) return;
+                if (world == null)
+                    return;
 
-                // Dynamic search of EDT UI type
-                // Using full name to not require reference DLL
-                var edtType = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(a => a.GetTypes())
-                    .FirstOrDefault(t => t.FullName == "ExtraDetailingTools.Systems.UI.UI");
-
-                if (edtType != null)
+                // Scan assemblies only once to locate EDT UI type
+                if (!_edtScanned)
                 {
-                    // EDT IS INSTALLED
-                    // Trying to force EDT 'showMarker' binding to our value
-                    var bindingField = AccessTools.Field(edtType, "showMarker");
-                    var bindingInstance = bindingField?.GetValue(null);
+                    _edtUIType = AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(a => a.GetTypes())
+                        .FirstOrDefault(t =>
+                            t.FullName == "ExtraDetailingTools.Systems.UI.UI");
 
-                    if (bindingInstance != null)
-                    {
-                        // Call binding Update()
-                        AccessTools.Method(bindingInstance.GetType(), "Update").Invoke(bindingInstance, null);
-
-                        // Try to trigger EDT UI event if exist
-                        var edtUISystem = world.Systems.FirstOrDefault(s => s.GetType().FullName == "ExtraDetailingTools.Systems.UI.UI");
-
-                        if (edtUISystem != null)
-                        {
-                            var triggerMethod = AccessTools.Method(edtUISystem.GetType(), "TriggerEvent", new Type[] { typeof(string), typeof(string) });
-                            triggerMethod?.Invoke(edtUISystem, new object[] { "edt", "updatemarkersvisible" });
-                        }
-
-                        log.Info("EDT synched finished.");
-                    }
+                    _edtScanned = true;
                 }
+
+                // EDT is not installed or not detected
+                if (_edtUIType == null)
+                    return;
+
+                // Retrieve the static 'showMarker' binding from EDT
+                var bindingField = AccessTools.Field(_edtUIType, "showMarker");
+                var bindingInstance = bindingField?.GetValue(null);
+                if (bindingInstance == null)
+                    return;
+
+                // Force EDT binding update to reflect current state
+                var updateMethod = AccessTools.Method(
+                    bindingInstance.GetType(),
+                    "Update"
+                );
+                updateMethod?.Invoke(bindingInstance, null);
+
+                // Locate EDT UI system instance in the current world
+                var edtUISystem = world.Systems
+                    .FirstOrDefault(s => s.GetType().FullName == _edtUIType.FullName);
+
+                if (edtUISystem != null)
+                {
+                    // Attempt to notify EDT UI about marker visibility change
+                    var triggerMethod = AccessTools.Method(
+                        edtUISystem.GetType(),
+                        "TriggerEvent",
+                        new[] { typeof(string), typeof(string) }
+                    );
+
+                    triggerMethod?.Invoke(
+                        edtUISystem,
+                        new object[] { "edt", "updatemarkersvisible" }
+                    );
+                }
+
+                // Successful synchronization (debug only)
+                log.Debug("EDT sync completed.");
             }
             catch (Exception ex)
             {
-                // If someting fails, is ignored to no break EDT
-                log.Debug("External synch not needed or failed: " + ex.Message);
+                // External mod synchronization is best-effort and must never break gameplay
+                log.Debug("External sync skipped or failed: " + ex.Message);
             }
         }
 
         public void OnDispose()
         {
+            // Remove all Harmony patches applied by this mod
             m_Harmony?.UnpatchAll("com.g87.togglemarkers");
+
+            // Unregister input handler to avoid duplicated callbacks
+            if (m_ToggleAction != null && _toggleHandler != null)
+            {
+                m_ToggleAction.onInteraction -= _toggleHandler;
+                _toggleHandler = null;
+            }
+
+            // Unregister settings UI
             if (m_Setting != null)
             {
                 m_Setting.UnregisterInOptionsUI();
@@ -118,6 +201,4 @@ namespace ToggleMarkers.MOD
             }
         }
     }
-
-   
 }
