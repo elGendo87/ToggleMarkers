@@ -27,7 +27,7 @@ namespace ToggleMarkers.MOD.Patches
             [HarmonyPatch(MethodType.Setter)]
             public static void SetPrefix(bool value)
             {
-                // Sincronización inversa: si EDT (u otro mod) cambia el valor, nosotros lo adoptamos
+                // SYNC: if EDT (or any other mod) change the value, that value is set
                 if (ForceEnabled != value)
                 {
                     ForceEnabled = value;
