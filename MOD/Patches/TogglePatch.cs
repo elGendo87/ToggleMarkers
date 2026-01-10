@@ -1,10 +1,5 @@
 ﻿using Game.Rendering;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ToggleMarkers.MOD.Patches
 {
@@ -33,6 +28,7 @@ namespace ToggleMarkers.MOD.Patches
                     ForceEnabled = value;
                 }
             }
+
         }
     }
 }

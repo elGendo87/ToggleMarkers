@@ -5,8 +5,6 @@ using Game.Input;
 using Unity.Entities;
 using Game.Modding;
 using Game.SceneFlow;
-using Game.Rendering;
-using UnityEngine;
 using HarmonyLib;
 using System.Linq;
 using System;
@@ -106,7 +104,7 @@ namespace ToggleMarkers.MOD
 
             // Log input event at debug level to avoid log spam
             log.Debug(
-                $"F9 pressed → MarkersVisible={TogglePatch.MarkersVisiblePatch.ForceEnabled}"
+                $"F8 pressed → MarkersVisible={TogglePatch.MarkersVisiblePatch.ForceEnabled}"
             );
         }
 
@@ -139,37 +137,19 @@ namespace ToggleMarkers.MOD
                 if (_edtUIType == null)
                     return;
 
-                // Retrieve the static 'showMarker' binding from EDT
+                // Log EDT detection (debug only)
                 var bindingField = AccessTools.Field(_edtUIType, "showMarker");
                 var bindingInstance = bindingField?.GetValue(null);
-                if (bindingInstance == null)
-                    return;
 
-                // Force EDT binding update to reflect current state
-                var updateMethod = AccessTools.Method(
-                    bindingInstance.GetType(),
-                    "Update"
-                );
-                updateMethod?.Invoke(bindingInstance, null);
-
-                // Locate EDT UI system instance in the current world
-                var edtUISystem = world.Systems
-                    .FirstOrDefault(s => s.GetType().FullName == _edtUIType.FullName);
-
-                if (edtUISystem != null)
+                if (bindingInstance != null)
                 {
-                    // Attempt to notify EDT UI about marker visibility change
-                    var triggerMethod = AccessTools.Method(
-                        edtUISystem.GetType(),
-                        "TriggerEvent",
-                        new[] { typeof(string), typeof(string) }
-                    );
+                    // Update EDT binding to reflect current state: new method
+                    var updateMethod = AccessTools.Method(bindingInstance.GetType(), "Update");
+                    updateMethod?.Invoke(bindingInstance, null);
 
-                    triggerMethod?.Invoke(
-                        edtUISystem,
-                        new object[] { "edt", "updatemarkersvisible" }
-                    );
+                    log.Debug("EDT Binding updated silently.");
                 }
+
 
                 // Successful synchronization (debug only)
                 log.Debug("EDT sync completed.");

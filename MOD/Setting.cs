@@ -42,7 +42,7 @@ namespace ToggleMarkers.MOD
         public string ModInfo => "elGendo87";
 
         [SettingsUISection(kSection, kInfoGroup)]
-        public string ModVersion => "1.1.0";
+        public string ModVersion => "1.4.0";
 
         // --- SUPPORT BUTTONS ---
 
