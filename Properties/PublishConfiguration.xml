@@ -91,7 +91,7 @@ Thanks to modders for guidance and support!</LongDescription>
   <ExternalLink Type="discord" Url="https://discord.gg/yN2xb93NMm" />
   <ExternalLink Type="kofi" Url="https://ko-fi.com/elgendo87" />
   <ExternalLink Type="paypal" Url="https://paypal.me/elGendo87" />
-  <ExternalLink Type="github" Url="https://github.com/elGendo87/ToggleMarkers" />
+  <ExternalLink Type="github" Url="https://github.com/elGendo87/ToggleMarkers/tree/branch001" />
   <!--Supported values Public, Private, Unlisted-->
   <AccessLevel Value="Public" />
 </Publish>

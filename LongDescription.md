@@ -57,3 +57,5 @@ Extra Detailing Tools mod by Triton Supreme.
 Thanks to testers and supporters for his feedback!  
 
 Thanks to modders for guidance and support!
+
+I hate github. Do not expect proper code sharing there.
