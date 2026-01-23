@@ -39,7 +39,7 @@ namespace ToggleMarkers.MOD
                     // Keybindings
                     { m_Setting.GetOptionGroupLocaleID(Setting.kKeybindingGroup), "KEY BINDING" },
                     { m_Setting.GetOptionLabelLocaleID(nameof(Setting.KeyboardBinding)), "Toggle markers visibility" },
-                    { m_Setting.GetOptionDescLocaleID(nameof(Setting.KeyboardBinding)), "Shows/hides markers and invisible roads. This will work also with Extra Detailing Tools UI toggle." },
+                    { m_Setting.GetOptionDescLocaleID(nameof(Setting.KeyboardBinding)), "Shows/hides markers and invisible roads." },
                     { m_Setting.GetOptionLabelLocaleID(nameof(Setting.ResetBindings)), "Reset Key Binding" },
                     { m_Setting.GetOptionDescLocaleID(nameof(Setting.ResetBindings)), "Reset key binding to default key F8." },
                     { m_Setting.GetBindingKeyLocaleID(Mod.kButtonActionName), "Toggle" },

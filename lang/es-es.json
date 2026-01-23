@@ -16,7 +16,7 @@
   "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.FollowX]": "Sígueme en mi cuenta de <X>.",
   "Options.GROUP[ToggleMarkers.ToggleMarkers.MOD.Mod.Key Binding]": "VINCULACION DE TECLA",
   "Options.OPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.KeyboardBinding]": "Alternar visibilidad de marcadores",
-  "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.KeyboardBinding]": "Muestra/Oculta marcadores y caminos invisibles. Esto funciona también al alternar en la interface de Extra Detailing Tools.",
+  "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.KeyboardBinding]": "Muestra/Oculta marcadores y caminos invisibles.",
   "Options.OPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.ResetBindings]": "Restablecer vinculación",
   "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.ResetBindings]": "Restablece la vinculación de tecla a por defecto, tecla F8.",
   "Options.OPTION[ToggleMarkers.ToggleMarkers.MOD.Mod/ToggleMarkersAction/binding]": "Alternar",

@@ -13,16 +13,18 @@
 
 👷🏻 Please, if you are enjoying my mods consider making a contribution.  
 
-🌐 This mod isn't in all languages yet.  
+🌐 English | Español localisation available.  
 
 ⚖️ Total package weight is approximately 1 MB.  
 
 
 ## 📝 About the mod
 
-Simple mod to toggle markers visibility. This mod is compatible with Extra Detailing Tools mod.  
+Simple mod to toggle markers visibility. This mod is compatible with Extra Detailing Tools mod and Better Buldozer.  
 
 Default key to toggle markers is F8, but you can change it in the mod options menu.
+
+If you are not a "power user", you may not find this mod useful.
 
 If you are reading this, you unlocked the achievement "City Builder" 👷. Congratulations!  
 
@@ -31,7 +33,7 @@ If you are reading this, you unlocked the achievement "City Builder" 👷. Congr
 
 * Hit F8 to toggle markers and invisible roads visibility
 
-* 
+
 ## 🔎 My other mods
 
 Check my other mods, maybe you will find something useful.
@@ -53,7 +55,7 @@ If you are reading this, you unlocked the achievement "Enlightenment" 🧠. Cong
 ## 🌐 Localization
 
 * English
-* Spanish
+* Spanish (i18n mod)
 
 ## 🤝 Acknowledgment
 
@@ -67,11 +69,11 @@ Thanks to modders for guidance and support!</LongDescription>
   <!--Thumbnail-->
   <Thumbnail Value="Properties/Thumbnail.png" />
   <!--Screenshot, can be set multiple times-->
-  <Screenshot Value="" />
+  <Screenshot Value="Properties/Screenshot_000.png" />
   <!--Tag, can be set multiple times-->
-  <Tag Value="" />
+  <Tag Value="Code Mod" />
   <!--Link to the forum post where the mod can be discussed-->
-  <ForumLink Value="" />
+  <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/g87-toggle-markers.1896595/" />
   <!--Version of the mod-->
   <ModVersion Value="1.0" />
   <!--Recommended version of the base game to use the mod-->
@@ -85,7 +87,10 @@ Thanks to modders for guidance and support!</LongDescription>
   <!--<ChangeLog>
 	</ChangeLog>-->
   <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
-  <ExternalLink Type="" Url="" />
+  <ExternalLink Type="x" Url="https://x.com/elGendo87" />
+  <ExternalLink Type="discord" Url="https://discord.gg/yN2xb93NMm" />
+  <ExternalLink Type="kofi" Url="https://ko-fi.com/elgendo87" />
+  <ExternalLink Type="paypal" Url="https://paypal.me/elGendo87" />
   <!--Supported values Public, Private, Unlisted-->
   <AccessLevel Value="Public" />
 </Publish>
