@@ -4,16 +4,18 @@
 
 👷🏻 Please, if you are enjoying my mods consider making a contribution.  
 
-🌐 This mod isn't in all languages yet.  
+🌐 English | Español localisation available.  
 
 ⚖️ Total package weight is approximately 1 MB.  
 
 
 ## 📝 About the mod
 
-Simple mod to toggle markers visibility. This mod is compatible with Extra Detailing Tools mod.  
+Simple mod to toggle markers visibility. This mod is compatible with Extra Detailing Tools mod and Better Buldozer.  
 
 Default key to toggle markers is F8, but you can change it in the mod options menu.
+
+If you are not a "power user", you may not find this mod useful.
 
 If you are reading this, you unlocked the achievement "City Builder" 👷. Congratulations!  
 
@@ -22,7 +24,7 @@ If you are reading this, you unlocked the achievement "City Builder" 👷. Congr
 
 * Hit F8 to toggle markers and invisible roads visibility
 
-* 
+
 ## 🔎 My other mods
 
 Check my other mods, maybe you will find something useful.
@@ -44,7 +46,7 @@ If you are reading this, you unlocked the achievement "Enlightenment" 🧠. Cong
 ## 🌐 Localization
 
 * English
-* Spanish
+* Spanish (i18n mod)
 
 ## 🤝 Acknowledgment
 
@@ -55,3 +57,5 @@ Extra Detailing Tools mod by Triton Supreme.
 Thanks to testers and supporters for his feedback!  
 
 Thanks to modders for guidance and support!
+
+I hate github. Do not expect proper code sharing there.
