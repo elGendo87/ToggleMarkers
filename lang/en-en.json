@@ -16,7 +16,7 @@
   "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.FollowX]": "Follow on <X>.",
   "Options.GROUP[ToggleMarkers.ToggleMarkers.MOD.Mod.Key Binding]": "KEY BINDING",
   "Options.OPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.KeyboardBinding]": "Toggle markers visibility",
-  "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.KeyboardBinding]": "Shows/hides markers and invisible roads. This will work also with Extra Detailing Tools UI toggle.",
+  "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.KeyboardBinding]": "Shows/hides markers and invisible roads.",
   "Options.OPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.ResetBindings]": "Reset Key Binding",
   "Options.OPTION_DESCRIPTION[ToggleMarkers.ToggleMarkers.MOD.Mod.Setting.ResetBindings]": "Reset key binding to default key F8.",
   "Options.OPTION[ToggleMarkers.ToggleMarkers.MOD.Mod/ToggleMarkersAction/binding]": "Toggle",
