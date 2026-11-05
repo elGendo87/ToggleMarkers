@@ -77,7 +77,7 @@ I hate github. Do not expect proper code sharing there.</LongDescription>
   <!--Link to the forum post where the mod can be discussed-->
   <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/g87-toggle-markers.1896595/" />
   <!--Version of the mod-->
-  <ModVersion Value="1.0" />
+  <ModVersion Value="1.4.0" />
   <!--Recommended version of the base game to use the mod-->
   <GameVersion Value="1.0.*" />
   <!--Dependency for the mod, can be set multiple times-->

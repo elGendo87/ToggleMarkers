@@ -5,11 +5,11 @@ using Game.Input;
 using Unity.Entities;
 using Game.Modding;
 using Game.SceneFlow;
-using HarmonyLib;
 using System.Linq;
 using System;
-using ToggleMarkers.MOD.Patches;
 using UnityEngine.InputSystem;
+using Game.Rendering;
+using System.Reflection;
 
 namespace ToggleMarkers.MOD
 {
@@ -34,8 +34,8 @@ namespace ToggleMarkers.MOD
         // Action name as defined in the settings
         public const string kButtonActionName = "ToggleMarkersAction";
 
-        // Harmony instance used for patching
-        private Harmony m_Harmony;
+        // Game system that owns the markers visibility flag
+        private RenderingSystem _renderingSystem;
 
         // Cached input handler delegate to allow proper unregistration on dispose
         private Action<ProxyAction, InputActionPhase> _toggleHandler;
@@ -47,9 +47,8 @@ namespace ToggleMarkers.MOD
 
         public void OnLoad(UpdateSystem updateSystem)
         {
-            // Initialize and apply Harmony patches
-            m_Harmony = new Harmony("com.g87.togglemarkers");
-            m_Harmony.PatchAll();
+            // Get the game system that owns the markers visibility flag
+            _renderingSystem = updateSystem.World.GetOrCreateSystemManaged<RenderingSystem>();
 
             // Create and register mod settings
             m_Setting = new Setting(this);
@@ -95,16 +94,15 @@ namespace ToggleMarkers.MOD
         /// </summary>
         private void ToggleMarkersLogic()
         {
-            // Toggle internal marker visibility state
-            TogglePatch.MarkersVisiblePatch.ForceEnabled =
-                !TogglePatch.MarkersVisiblePatch.ForceEnabled;
+            // Toggle the game's marker visibility flag
+            _renderingSystem.markersVisible = !_renderingSystem.markersVisible;
 
             // Attempt best-effort synchronization with external mods
             TrySyncWithExternalMods();
 
             // Log input event at debug level to avoid log spam
             log.Debug(
-                $"F8 pressed → MarkersVisible={TogglePatch.MarkersVisiblePatch.ForceEnabled}"
+                $"F8 pressed → MarkersVisible={_renderingSystem.markersVisible}"
             );
         }
 
@@ -125,10 +123,10 @@ namespace ToggleMarkers.MOD
                 // Scan assemblies only once to locate EDT UI type
                 if (!_edtScanned)
                 {
+                    // Look the type up by name: GetTypes() throws on a mod missing a dependency
                     _edtUIType = AppDomain.CurrentDomain.GetAssemblies()
-                        .SelectMany(a => a.GetTypes())
-                        .FirstOrDefault(t =>
-                            t.FullName == "ExtraDetailingTools.Systems.UI.UI");
+                        .Select(a => a.GetType("ExtraDetailingTools.Systems.UI.UI", false))
+                        .FirstOrDefault(t => t != null);
 
                     _edtScanned = true;
                 }
@@ -138,13 +136,13 @@ namespace ToggleMarkers.MOD
                     return;
 
                 // Log EDT detection (debug only)
-                var bindingField = AccessTools.Field(_edtUIType, "showMarker");
+                var bindingField = _edtUIType.GetField("showMarker", BindingFlags.NonPublic | BindingFlags.Static);
                 var bindingInstance = bindingField?.GetValue(null);
 
                 if (bindingInstance != null)
                 {
                     // Update EDT binding to reflect current state: new method
-                    var updateMethod = AccessTools.Method(bindingInstance.GetType(), "Update");
+                    var updateMethod = bindingInstance.GetType().GetMethod("Update", Type.EmptyTypes);
                     updateMethod?.Invoke(bindingInstance, null);
 
                     log.Debug("EDT Binding updated silently.");
@@ -163,9 +161,6 @@ namespace ToggleMarkers.MOD
 
         public void OnDispose()
         {
-            // Remove all Harmony patches applied by this mod
-            m_Harmony?.UnpatchAll("com.g87.togglemarkers");
-
             // Unregister input handler to avoid duplicated callbacks
             if (m_ToggleAction != null && _toggleHandler != null)
             {
