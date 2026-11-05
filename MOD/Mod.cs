@@ -123,10 +123,10 @@ namespace ToggleMarkers.MOD
                 // Scan assemblies only once to locate EDT UI type
                 if (!_edtScanned)
                 {
+                    // Look the type up by name: GetTypes() throws on a mod missing a dependency
                     _edtUIType = AppDomain.CurrentDomain.GetAssemblies()
-                        .SelectMany(a => a.GetTypes())
-                        .FirstOrDefault(t =>
-                            t.FullName == "ExtraDetailingTools.Systems.UI.UI");
+                        .Select(a => a.GetType("ExtraDetailingTools.Systems.UI.UI", false))
+                        .FirstOrDefault(t => t != null);
 
                     _edtScanned = true;
                 }
