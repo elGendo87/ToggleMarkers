@@ -52,6 +52,8 @@ If you are reading this, you unlocked the achievement "Enlightenment" 🧠. Cong
 
 Consider supporting mods creators.  
 
+Thanks Toverux for helping with the fix in v1.5!!!
+
 Extra Detailing Tools mod by Triton Supreme.
 
 Thanks to testers and supporters for his feedback!  

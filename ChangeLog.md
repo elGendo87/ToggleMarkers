@@ -1,1 +1,3 @@
-- First Release
+- Fix mod not working in some cases
+- Other minor fixes and improvements
+- Thanks toverux for the help!
