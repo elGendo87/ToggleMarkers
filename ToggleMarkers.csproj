@@ -28,9 +28,6 @@
 	</Target>
 
 	<ItemGroup>
-		<Reference Include="0Harmony">
-		  <HintPath>0Harmony.dll</HintPath>
-		</Reference>
 		<Reference Include="Game">
 			<Private>false</Private>
 		</Reference>
@@ -87,12 +84,6 @@
 	<ItemGroup>
 		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="0Harmony.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	</ItemGroup>
 
 	<ItemGroup>

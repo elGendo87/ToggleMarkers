@@ -5,11 +5,11 @@ using Game.Input;
 using Unity.Entities;
 using Game.Modding;
 using Game.SceneFlow;
-using HarmonyLib;
 using System.Linq;
 using System;
 using UnityEngine.InputSystem;
 using Game.Rendering;
+using System.Reflection;
 
 namespace ToggleMarkers.MOD
 {
@@ -136,13 +136,13 @@ namespace ToggleMarkers.MOD
                     return;
 
                 // Log EDT detection (debug only)
-                var bindingField = AccessTools.Field(_edtUIType, "showMarker");
+                var bindingField = _edtUIType.GetField("showMarker", BindingFlags.NonPublic | BindingFlags.Static);
                 var bindingInstance = bindingField?.GetValue(null);
 
                 if (bindingInstance != null)
                 {
                     // Update EDT binding to reflect current state: new method
-                    var updateMethod = AccessTools.Method(bindingInstance.GetType(), "Update");
+                    var updateMethod = bindingInstance.GetType().GetMethod("Update", Type.EmptyTypes);
                     updateMethod?.Invoke(bindingInstance, null);
 
                     log.Debug("EDT Binding updated silently.");
