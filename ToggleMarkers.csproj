@@ -3,6 +3,9 @@
 	<PropertyGroup>
 		<Configurations>Debug;Release</Configurations>
 	
+		<!--Mod version, shown in the options and written to the publish configuration-->
+		<Version>1.4.0</Version>
+
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PDXAccountDataPath>$(USERPROFILE)\Desktop\pdx_account.txt</PDXAccountDataPath>
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
@@ -20,6 +23,10 @@
 		<XmlPoke XmlInputPath="$(PublishConfigurationPath)" Query="//ChangeLog" Value="$([System.IO.File]::ReadAllText($(IntermediateOutputPath)\ChangeLogEscaped.txt))" />
 	</Target>
 	
+	<Target Name="SetupVersion" BeforeTargets="Publish">
+		<XmlPoke XmlInputPath="$(PublishConfigurationPath)" Query="//ModVersion/@Value" Value="$(Version)" />
+	</Target>
+
 	<ItemGroup>
 		<Reference Include="0Harmony">
 		  <HintPath>0Harmony.dll</HintPath>
