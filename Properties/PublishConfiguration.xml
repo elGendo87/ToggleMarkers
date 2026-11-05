@@ -1,6 +1,6 @@
 <Publish>
   <!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
-  <ModId Value="" />
+  <ModId Value="132532" />
   <!--Name of the mod to display to players-->
   <DisplayName Value="ToggleMarkers" />
   <!--Short description of the mod-->
@@ -79,7 +79,7 @@ I hate github. Do not expect proper code sharing there.</LongDescription>
   <!--Link to the forum post where the mod can be discussed-->
   <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/g87-toggle-markers.1896595/" />
   <!--Version of the mod-->
-  <ModVersion Value="1.4.0" />
+  <ModVersion Value="1.5.0" />
   <!--Recommended version of the base game to use the mod-->
   <GameVersion Value="1.0.*" />
   <!--Dependency for the mod, can be set multiple times-->
@@ -87,11 +87,10 @@ I hate github. Do not expect proper code sharing there.</LongDescription>
   <!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
   <RequiredDLC Value="" />
   <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-  <ChangeLog Value="">- Fix mod not working in some cases
+  <!--ChangeLog Value=""></ChangeLog-->
+  <ChangeLog>- Fix mod not working in some cases
 - Other minor fixes and improvements
-- Thanks toverux</ChangeLog>
-  <!--<ChangeLog>
-	</ChangeLog>-->
+- Thanks toverux for the help!</ChangeLog>
   <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
   <ExternalLink Type="x" Url="https://x.com/elGendo87" />
   <ExternalLink Type="discord" Url="https://discord.gg/yN2xb93NMm" />
