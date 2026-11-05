@@ -4,7 +4,7 @@
 		<Configurations>Debug;Release</Configurations>
 	
 		<!--Mod version, shown in the options and written to the publish configuration-->
-		<Version>1.4.0</Version>
+		<Version>1.5.0</Version>
 
 		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
 		<PDXAccountDataPath>$(USERPROFILE)\Desktop\pdx_account.txt</PDXAccountDataPath>
