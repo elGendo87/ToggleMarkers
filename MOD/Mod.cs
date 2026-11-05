@@ -8,8 +8,8 @@ using Game.SceneFlow;
 using HarmonyLib;
 using System.Linq;
 using System;
-using ToggleMarkers.MOD.Patches;
 using UnityEngine.InputSystem;
+using Game.Rendering;
 
 namespace ToggleMarkers.MOD
 {
@@ -34,8 +34,8 @@ namespace ToggleMarkers.MOD
         // Action name as defined in the settings
         public const string kButtonActionName = "ToggleMarkersAction";
 
-        // Harmony instance used for patching
-        private Harmony m_Harmony;
+        // Game system that owns the markers visibility flag
+        private RenderingSystem _renderingSystem;
 
         // Cached input handler delegate to allow proper unregistration on dispose
         private Action<ProxyAction, InputActionPhase> _toggleHandler;
@@ -47,9 +47,8 @@ namespace ToggleMarkers.MOD
 
         public void OnLoad(UpdateSystem updateSystem)
         {
-            // Initialize and apply Harmony patches
-            m_Harmony = new Harmony("com.g87.togglemarkers");
-            m_Harmony.PatchAll();
+            // Get the game system that owns the markers visibility flag
+            _renderingSystem = updateSystem.World.GetOrCreateSystemManaged<RenderingSystem>();
 
             // Create and register mod settings
             m_Setting = new Setting(this);
@@ -95,16 +94,15 @@ namespace ToggleMarkers.MOD
         /// </summary>
         private void ToggleMarkersLogic()
         {
-            // Toggle internal marker visibility state
-            TogglePatch.MarkersVisiblePatch.ForceEnabled =
-                !TogglePatch.MarkersVisiblePatch.ForceEnabled;
+            // Toggle the game's marker visibility flag
+            _renderingSystem.markersVisible = !_renderingSystem.markersVisible;
 
             // Attempt best-effort synchronization with external mods
             TrySyncWithExternalMods();
 
             // Log input event at debug level to avoid log spam
             log.Debug(
-                $"F8 pressed → MarkersVisible={TogglePatch.MarkersVisiblePatch.ForceEnabled}"
+                $"F8 pressed → MarkersVisible={_renderingSystem.markersVisible}"
             );
         }
 
@@ -163,9 +161,6 @@ namespace ToggleMarkers.MOD
 
         public void OnDispose()
         {
-            // Remove all Harmony patches applied by this mod
-            m_Harmony?.UnpatchAll("com.g87.togglemarkers");
-
             // Unregister input handler to avoid duplicated callbacks
             if (m_ToggleAction != null && _toggleHandler != null)
             {
